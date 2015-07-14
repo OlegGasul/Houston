@@ -18,7 +18,7 @@ public class DataModel {
     private DataModel() { }
 
     public Item getData(String key) {
-        return data.containsKey(key) ? data.get(key) : null;
+        return data.get(key);
     }
 
     public Item setData(String key, String value) {
