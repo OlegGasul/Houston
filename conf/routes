@@ -4,6 +4,8 @@
 
 # Home page
 GET     /                                       Application.index
+GET     /data/?                                 DataController.getData
+POST    /data/?                                 DataController.setData
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
