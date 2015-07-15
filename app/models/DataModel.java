@@ -6,16 +6,9 @@ import models.entity.Item;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class DataModel {
+public enum DataModel {
+    INSTANCE;
     private ConcurrentMap<String, Item> data = new ConcurrentHashMap<String, Item>();
-
-    private static DataModel ourInstance = new DataModel();
-
-    public static DataModel getInstance() {
-        return ourInstance;
-    }
-
-    private DataModel() { }
 
     public Item getData(String key) {
         return data.get(key);
