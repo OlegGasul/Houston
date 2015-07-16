@@ -1,2 +1,71 @@
 #{extends 'main.html' /}
 #{set title: 'Houston HQ' /}
+
+<div style="float: left; width: 250px;">
+    <input id="search_string" type="text" />
+    <div id="results" style="overflow: auto; height: 600px;"></div>
+</div>
+
+<div style="float: left; width: 1000px; height: 600px;" id="map"></div>
+
+<div id="popup" style="display: none">
+    <a href="#">Сюда</a>
+</div>
+
+<script>
+    var searchController = new MapSearchController();
+    var dataManager = new DataManager();
+    var gpsMarker = null;
+    var marker = null;
+
+    $(document).ready(function() {
+        var map = new L.Map('map', {center: new L.LatLng(50.35472, 30.17350), zoom: 10, zoomAnimation: false });
+        var yandex = new L.Yandex();
+//        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.8, overlay: true});
+        map.addLayer(yandex);
+        map.addControl(new L.Control.Layers({"Yandex": yandex}/*, {"Traffic": yandexTraffic}*/));
+
+        function setMarker(latlng) {
+            if (marker == null) {
+                marker = L.marker(latlng, {draggable: 'true'}).addTo(map);
+                marker.bindPopup($('#popup').html());
+            } else
+                marker.setLatLng(latlng);
+        }
+
+        $('#search_string').enterKey(function () {
+            searchController.search($(this).val(), function(data) {
+                $('#results').html('');
+                for (var i = 0; i < data.length; i++) {
+                    $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
+                }
+
+                $('.address').click(function() {
+                    var coordinates = $(this).attr('data-coordinate').split(' ');
+                    setMarker(coordinates.reverse());
+                    map.setView(marker.getLatLng(), 14);
+                });
+            });
+        });
+
+        map.on('click', function(e) {
+            setMarker(e.latlng);
+        });
+
+        function requestGPS() {
+            dataManager.getKey("gps", 0, function(data) {
+                if (data.value) {
+                    var coordinates = data.value.split(',');
+                    if (!gpsMarker) {
+                        gpsMarker = L.marker(coordinates).addTo(map);
+                    } else
+                        gpsMarker.setLatLng(coordinates);
+                }
+
+                setTimeout(requestGPS, 1000);
+            });
+        }
+
+        setTimeout(requestGPS, 1000);
+    })
+</script>
