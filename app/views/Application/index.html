@@ -28,6 +28,8 @@
 
     function calculateRoute() {
         if (gpsMarker != null && marker != null && routeFlag) {
+            routeFlag = false;
+
             var gpsLatlng = gpsMarker.getLatLng();
             var latlng = marker.getLatLng();
             searchController.calculateRoute(gpsLatlng.lng + "," + gpsLatlng.lat, latlng.lng + "," + latlng.lat, function(geometry) {
@@ -43,7 +45,6 @@
                 }).addTo(map);
             });
         }
-        routeFlag = false;
     }
 
     function goHere() {
@@ -52,18 +53,21 @@
 
         var latlng = marker.getLatLng();
         dataManager.setKey("destination", latlng.lat + "," + latlng.lng, function() {
+            routeFlag = true;
             calculateRoute();
         });
         marker.closePopup();
     }
 
     $(document).ready(function() {
-        var yandex = new L.Yandex();
-        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
-        var ggl = new L.Google();
-        map.addLayer(yandex);
-        map.addLayer(ggl);
-        map.addControl(new L.Control.Layers({"Yandex": yandex, 'Google': ggl}, {"Traffic": yandexTraffic}));
+//        var yandex = new L.Yandex();
+//        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
+        var google = new L.Google('ROADMAP');
+        var googleSatellite = new L.Google();
+//        map.addLayer(yandex);
+        map.addLayer(google);
+        map.addLayer(googleSatellite);
+        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite}/*, 'Yandex карта': yandex}, {"Traffic": yandexTraffic}*/));
 
         function setMarker(latlng) {
             if (marker == null) {
@@ -99,7 +103,7 @@
                 if (data.value) {
                     var coordinates = data.value.split(',');
                     if (!gpsMarker) {
-                        gpsMarker = L.marker(coordinates).addTo(map);
+                        gpsMarker = L.circleMarker(coordinates, {color: 'red'}).addTo(map);
                     } else
                         gpsMarker.setLatLng(coordinates);
 
@@ -111,5 +115,15 @@
         }
 
         setTimeout(requestGPS, 1000);
+
+        dataManager.getKey("destination", 0, function(data) {
+            if (data.value) {
+                var coordinates = data.value.split(',');
+                setMarker(coordinates);
+
+                routeFlag = true;
+                calculateRoute();
+            }
+        });
     });
 </script>
