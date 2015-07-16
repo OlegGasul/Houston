@@ -30,6 +30,9 @@ function MapSearchController(defaultCity) {
             dataType: "json"
         }).done(function(data) {
             callback(convertResponse(data.response));
+        }).error(function() {
+            console.log('Yandex error');
+            console.dir(arguments);
         });
     }
 

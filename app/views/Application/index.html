@@ -19,6 +19,8 @@
 <script>
     var searchController = new MapSearchController();
     var dataManager = new DataManager();
+    var geoHelper = new GeoHelper();
+
     var gpsMarker = null;
     var marker = null;
     var polyline = null;
@@ -38,9 +40,9 @@
                 }
 
                 polyline = new L.Polyline(geometry, {
-                    color: 'blue',
-                    weight: 7,
-                    opacity: 0.3,
+                    color: 'red',
+                    weight: 5,
+                    opacity: 0.4,
                     smoothFactor: 1
                 }).addTo(map);
             });
@@ -80,18 +82,39 @@
         }
 
         $('#search_string').enterKey(function () {
-            searchController.search('Киев, ' + $(this).val(), function(data) {
-                $('#results').html('');
-                for (var i = 0; i < data.length; i++) {
-                    $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
-                }
+            var text = $(this).val();
 
-                $('.address').click(function() {
-                    var coordinates = $(this).attr('data-coordinate').split(' ');
-                    setMarker(coordinates.reverse());
-                    map.setView(marker.getLatLng(), 17);
+            function doSearch() {
+                searchController.search('Киев, ' + text, function(data) {
+                    $('#results').html('');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
+                    }
+
+                    $('.address').click(function() {
+                        var coordinates = $(this).attr('data-coordinate').split(' ');
+                        setMarker(coordinates.reverse());
+                        map.setView(marker.getLatLng(), 17);
+                    });
                 });
-            });
+            }
+
+            var regexp1 = /.*?(\d+)\s*°(\d+)\s*‘(\d+)\s*‘\s*‘\s*N\s*,\s*(\d+)\s*°\s*(\d+)\s*‘\s*(\d+)\s*‘\s*‘\s*E.*?/i;
+            if (regexp1.test(text)) {
+                var results = regexp1.exec(text);
+                var lat = geoHelper.convertToDec(results[1], results[2], results[3]);
+                var lng = geoHelper.convertToDec(results[4], results[5], results[6]);
+                setMarker([lat, lng]);
+                map.setView(marker.getLatLng(), 17);
+            } else if (/[a-zA-Zа-яА-Я]+/ig.test(text)) {
+                var coordinates = text.split(',');
+                if (coordinates.length < 2)
+                    doSearch()
+                setMarker(coordinates.reverse());
+                map.setView(marker.getLatLng(), 17);
+            } else {
+                doSearch()
+            }
         });
 
         map.on('click', function(e) {
@@ -103,7 +126,7 @@
                 if (data.value) {
                     var coordinates = data.value.split(',');
                     if (!gpsMarker) {
-                        gpsMarker = L.circleMarker(coordinates, {color: 'red'}).addTo(map);
+                        gpsMarker = L.circleMarker(coordinates, {weight: 7, radius: 7, color: 'red'}).addTo(map);
                     } else
                         gpsMarker.setLatLng(coordinates);
 
