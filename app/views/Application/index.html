@@ -1,15 +1,19 @@
 #{extends 'main.html' /}
 #{set title: 'Houston HQ' /}
 
-<div style="float: left; width: 250px;">
-    <input id="search_string" type="text" />
-    <div id="results" style="overflow: auto; height: 600px;"></div>
+<div id="bar-wrp">
+    <div>
+        <input id="search_string" type="text" />
+        <div id="results"></div>
+    </div>
 </div>
 
-<div style="float: left; width: 1000px; height: 600px;" id="map"></div>
+<div id="map-wrp">
+    <div id="map"></div>
+</div>
 
 <div id="popup" style="display: none">
-    <a href="#">Сюда</a>
+    <a href="#">Ехать сюда!</a>
 </div>
 
 <script>
@@ -17,6 +21,7 @@
     var dataManager = new DataManager();
     var gpsMarker = null;
     var marker = null;
+    var polyline;
 
     $(document).ready(function() {
         var map = new L.Map('map', {center: new L.LatLng(50.35472, 30.17350), zoom: 10, zoomAnimation: false });
@@ -34,7 +39,7 @@
         }
 
         $('#search_string').enterKey(function () {
-            searchController.search($(this).val(), function(data) {
+            searchController.search('Киев, ' + $(this).val(), function(data) {
                 $('#results').html('');
                 for (var i = 0; i < data.length; i++) {
                     $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
@@ -43,7 +48,7 @@
                 $('.address').click(function() {
                     var coordinates = $(this).attr('data-coordinate').split(' ');
                     setMarker(coordinates.reverse());
-                    map.setView(marker.getLatLng(), 14);
+                    map.setView(marker.getLatLng(), 17);
                 });
             });
         });
@@ -67,5 +72,47 @@
         }
 
         setTimeout(requestGPS, 1000);
+
+        new L.Polyline([
+                    30.54223,
+                    50.44468
+                ],
+                [
+                    30.54174,
+                    50.44434
+                ],
+                [
+                    30.54166,
+                    50.44428
+                ],
+                [
+                    30.54015,
+                    50.44509
+                ],
+                [
+                    30.53975,
+                    50.44531
+                ],
+                [
+                    30.53967,
+                    50.44535
+                ],
+                [
+                    30.53878,
+                    50.44584
+                ],
+                [
+                    30.53797,
+                    50.44628
+                ],
+                [
+                    30.53734,
+                    50.44663
+                ], {
+            color: 'red',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        }).addTo(map);
     })
 </script>

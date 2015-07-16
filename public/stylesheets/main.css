@@ -1,0 +1,57 @@
+body {
+    color: #2a2a2a;
+    font-family: Arial,sans-serif;
+}
+
+#bar-wrp {
+    top: 0;
+    left: 0;
+    width: 298px;
+    bottom: 0;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 3px #3c3c3c;
+    -moz-box-shadow: 0 0 3px #3c3c3c;
+    box-shadow: 0 0 3px #3c3c3c;
+    z-index: 10;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+}
+
+#search_string {
+    margin-left: 7px;
+    margin-top: 7px;
+    width: 276px;
+    height: 18px;
+    font-size: 17px;
+}
+
+#results {
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 30px;
+    overflow: auto;
+    margin-left: 7px;
+    margin-top: 7px;
+    width: 276px;
+    font-size: 16px;
+}
+
+#map-wrp {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 300px;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
