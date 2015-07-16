@@ -36,10 +36,11 @@ function MapSearchController(defaultCity) {
     this.calculateRoute = function(from, to, callback) {
         $.ajax({
             url: "http://api.visicom.ua/data-api/2.0/core/distance.html?origin=" + from + "&destination=" + to + "&geometry=path&key=" + VISICOM_AUTH_KEY,
-            method: "get",
-            dataType: "json"
+            method: "get"
         }).done(function(data) {
             callback(convertPolyline(data.geometry.coordinates));
+        }).error(function() {
+            console.dir(arguments);
         });
     }
 

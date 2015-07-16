@@ -1,11 +1,11 @@
 
 function DataManager() {
-    var url = 'http://10.10.10.3:8080/data';
+    var url = '/data';
 
     this.getKey = function(key, time, callback) {
         $.ajax({
             url: url + "?key=" + key + "&time=" + (time ? time : 0),
-            method: "get",
+            type: "get",
             dataType: "json"
         }).done(function(data) {
             callback(data);
@@ -14,9 +14,9 @@ function DataManager() {
 
     this.setKey = function(key, value, callback) {
         $.ajax({
-            url: url + "key=" + key + "&time=" + time ? time : 0,
-            method: "get",
-            dataType: "json"
+            url: url,
+            type: "post",
+            data: { key: key, value: value }
         }).done(function(data) {
             callback(data);
         });
