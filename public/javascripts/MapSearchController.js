@@ -26,7 +26,7 @@ function MapSearchController(defaultCity) {
     this.search = function(text, callback) {
         $.ajax({
             url: "https://geocode-maps.yandex.ru/1.x/?geocode=" + encodeURIComponent(text) + "&lang=ru-RU&format=json",
-            method: "get",
+            type: "get",
             dataType: "json"
         }).done(function(data) {
             callback(convertResponse(data.response));
@@ -35,8 +35,9 @@ function MapSearchController(defaultCity) {
 
     this.calculateRoute = function(from, to, callback) {
         $.ajax({
-            url: "http://api.visicom.ua/data-api/2.0/core/distance.html?origin=" + from + "&destination=" + to + "&geometry=path&key=" + VISICOM_AUTH_KEY,
-            method: "get"
+            url: "http://api.visicom.ua/data-api/2.0/core/distance.json?origin=" + from + "&destination=" + to + "&geometry=path&key=" + VISICOM_AUTH_KEY,
+            type: "get",
+            dataType: "json"
         }).done(function(data) {
             callback(convertPolyline(data.geometry.coordinates));
         }).error(function() {

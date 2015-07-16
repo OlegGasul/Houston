@@ -3,7 +3,7 @@
 
 <div id="bar-wrp">
     <div>
-        <input id="search_string" type="text" />
+        <input id="search_string" type="text" placeholder="Адрес" />
         <div id="results"></div>
     </div>
 </div>
@@ -21,7 +21,30 @@
     var dataManager = new DataManager();
     var gpsMarker = null;
     var marker = null;
-    var polyline;
+    var polyline = null;
+    var routeFlag = false;
+
+    var map = new L.Map('map', {center: new L.LatLng(50.45553, 30.52448), zoom: 10, zoomAnimation: false });
+
+    function calculateRoute() {
+        if (gpsMarker != null && marker != null && routeFlag) {
+            var gpsLatlng = gpsMarker.getLatLng();
+            var latlng = marker.getLatLng();
+            searchController.calculateRoute(gpsLatlng.lng + "," + gpsLatlng.lat, latlng.lng + "," + latlng.lat, function(geometry) {
+                if (polyline != null) {
+                    map.removeLayer(polyline);
+                }
+
+                polyline = new L.Polyline(geometry, {
+                    color: 'blue',
+                    weight: 7,
+                    opacity: 0.3,
+                    smoothFactor: 1
+                }).addTo(map);
+            });
+        }
+        routeFlag = false;
+    }
 
     function goHere() {
         if (marker == null)
@@ -29,17 +52,18 @@
 
         var latlng = marker.getLatLng();
         dataManager.setKey("destination", latlng.lat + "," + latlng.lng, function() {
-
+            calculateRoute();
         });
         marker.closePopup();
     }
 
     $(document).ready(function() {
-        var map = new L.Map('map', {center: new L.LatLng(50.45553, 30.52448), zoom: 10, zoomAnimation: false });
         var yandex = new L.Yandex();
-        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.8, overlay: true});
+        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
+        var ggl = new L.Google();
         map.addLayer(yandex);
-        map.addControl(new L.Control.Layers({"Yandex": yandex}, {"Traffic": yandexTraffic}));
+        map.addLayer(ggl);
+        map.addControl(new L.Control.Layers({"Yandex": yandex, 'Google': ggl}, {"Traffic": yandexTraffic}));
 
         function setMarker(latlng) {
             if (marker == null) {
@@ -78,6 +102,8 @@
                         gpsMarker = L.marker(coordinates).addTo(map);
                     } else
                         gpsMarker.setLatLng(coordinates);
+
+                    calculateRoute();
                 }
 
                 setTimeout(requestGPS, 1000);
@@ -85,14 +111,5 @@
         }
 
         setTimeout(requestGPS, 1000);
-
-//        searchController.calculateRoute("30.54173,50.44497", "30.52239,50.44777", function(geometry) {
-//            new L.Polyline(geometry, {
-//                color: 'red',
-//                weight: 3,
-//                opacity: 0.5,
-//                smoothFactor: 1
-//            }).addTo(map);
-//        });
     });
 </script>
