@@ -62,14 +62,14 @@
     }
 
     $(document).ready(function() {
-//        var yandex = new L.Yandex();
+        var yandex = new L.Yandex();
 //        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
         var google = new L.Google('ROADMAP');
         var googleSatellite = new L.Google();
-//        map.addLayer(yandex);
+        map.addLayer(yandex);
         map.addLayer(google);
         map.addLayer(googleSatellite);
-        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite}/*, 'Yandex карта': yandex}, {"Traffic": yandexTraffic}*/));
+        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex}/*, {"Traffic": yandexTraffic}*/));
 
         function setMarker(latlng) {
             if (marker == null) {
@@ -85,7 +85,7 @@
             var text = $(this).val();
 
             function doSearch() {
-                searchController.search('Киев, ' + text, function(data) {
+                searchController.search('Киев, ' + text.replace(/,/g, ' '), function(data) {
                     $('#results').html('');
                     for (var i = 0; i < data.length; i++) {
                         $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
@@ -105,12 +105,6 @@
                 var lat = geoHelper.convertToDec(results[1], results[2], results[3]);
                 var lng = geoHelper.convertToDec(results[4], results[5], results[6]);
                 setMarker([lat, lng]);
-                map.setView(marker.getLatLng(), 17);
-            } else if (/[a-zA-Zа-яА-Я]+/ig.test(text)) {
-                var coordinates = text.split(',');
-                if (coordinates.length < 2)
-                    doSearch()
-                setMarker(coordinates.reverse());
                 map.setView(marker.getLatLng(), 17);
             } else {
                 doSearch()
