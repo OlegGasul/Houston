@@ -67,8 +67,6 @@
         var google = new L.Google('ROADMAP');
         var googleSatellite = new L.Google();
         map.addLayer(yandex);
-        map.addLayer(google);
-        map.addLayer(googleSatellite);
         map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex}/*, {"Traffic": yandexTraffic}*/));
 
         function setMarker(latlng) {
