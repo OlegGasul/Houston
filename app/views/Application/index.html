@@ -63,11 +63,11 @@
 
     $(document).ready(function() {
         var yandex = new L.Yandex();
-//        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
+        var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
         var google = new L.Google('ROADMAP');
         var googleSatellite = new L.Google();
         map.addLayer(yandex);
-        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex}/*, {"Traffic": yandexTraffic}*/));
+        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex}, {"Traffic": yandexTraffic}));
 
         function setMarker(latlng) {
             if (marker == null) {
