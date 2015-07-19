@@ -64,11 +64,12 @@
     $(document).ready(function() {
         var yandex = new L.Yandex();
         var yandexSatellite = new L.Yandex('satellite');
+        var yandexHybrid = new L.Yandex('hybrid');
         var yandexTraffic = new L.Yandex("null", {traffic: true, opacity: 0.5, overlay: true});
         var google = new L.Google('ROADMAP');
         var googleSatellite = new L.Google();
         map.addLayer(yandex);
-        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex, 'Yandex спутник': yandexSatellite}, {"Traffic": yandexTraffic}));
+        map.addControl(new L.Control.Layers({'Google карта': google, 'Google спутник': googleSatellite, 'Yandex карта': yandex, 'Yandex спутник': yandexSatellite, 'Yandex гибрид': yandexHybrid}, {"Traffic": yandexTraffic}));
 
         function setMarker(latlng) {
             if (marker == null) {
