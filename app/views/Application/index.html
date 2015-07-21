@@ -36,7 +36,7 @@
             return;
 
         var gpsLatlng = gpsMarker.getLatLng();
-        searchController.findNearests(gpsLatlng, 6000, function(data) {
+        searchController.findNearests(gpsLatlng, 10000, function(data) {
             $('#results').html('');
             for (var i = 0; i < data.length; i++) {
                 $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + data[i].dist  + '</div>')
