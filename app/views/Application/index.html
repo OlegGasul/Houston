@@ -4,6 +4,9 @@
 <div id="bar-wrp">
     <div>
         <input id="search_string" type="text" placeholder="Адрес" />
+        <div>
+            <a class="search_link" href="#" onclick="findNearest();">Ближайшие</a>
+        </div>
         <div id="results"></div>
     </div>
 </div>
@@ -28,18 +31,41 @@
 
     var map = new L.Map('map', {center: new L.LatLng(50.45553, 30.52448), zoom: 10, zoomAnimation: false });
 
+    function findNearest() {
+        if (gpsMarker == null)
+            return;
+
+        var gpsLatlng = gpsMarker.getLatLng();
+        searchController.findNearests(gpsLatlng, 6000, function(data) {
+            $('#results').html('');
+            for (var i = 0; i < data.length; i++) {
+                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + data[i].dist  + '</div>')
+            }
+
+            $('.address').click(function() {
+                $('#results').html('');
+                $('#search_string').val($(this).attr('data-name'));
+
+                var e = jQuery.Event("keypress");
+                e.which = 13;
+                e.keyCode = 13;
+                $("#search_string").trigger(e);
+            });
+        })
+    }
+
     function calculateRoute() {
         if (gpsMarker != null && marker != null && routeFlag) {
             routeFlag = false;
 
             var gpsLatlng = gpsMarker.getLatLng();
             var latlng = marker.getLatLng();
-            searchController.calculateRoute(gpsLatlng.lng + "," + gpsLatlng.lat, latlng.lng + "," + latlng.lat, function(geometry) {
+            searchController.calculateRoute(gpsLatlng.lng + "," + gpsLatlng.lat, latlng.lng + "," + latlng.lat, function(response) {
                 if (polyline != null) {
                     map.removeLayer(polyline);
                 }
 
-                polyline = new L.Polyline(geometry, {
+                polyline = new L.Polyline(response.coordinates, {
                     color: 'red',
                     weight: 5,
                     opacity: 0.4,

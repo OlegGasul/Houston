@@ -14,13 +14,13 @@ function MapSearchController(defaultCity) {
         return results;
     }
 
-    function convertPolyline(coordinates) {
+    function convertPolyline(data) {
         var result = [];
-        for (var i = 0; i < coordinates.length; i++) {
-            result.push(new L.LatLng(coordinates[i][1], coordinates[i][0]));
+        for (var i = 0; i < data.geometry.coordinates.length; i++) {
+            result.push(new L.LatLng(data.geometry.coordinates[i][1], data.geometry.coordinates[i][0]));
         }
 
-        return result;
+        return { properties: data.properties, coordinates: result };
     }
 
     this.search = function(text, callback) {
@@ -42,7 +42,33 @@ function MapSearchController(defaultCity) {
             type: "get",
             dataType: "json"
         }).done(function(data) {
-            callback(convertPolyline(data.geometry.coordinates));
+            callback(convertPolyline(data));
+        }).error(function() {
+            console.dir(arguments);
+        });
+    }
+
+
+    function convertNearestResponse(response) {
+        var result = [];
+        for (var i = 0; i < response.features.length; i++) {
+            var feature = response.features[i];
+            if (feature.properties.settlement_id != "STL1NQ7EP")
+                continue;
+
+            result.push({ type: feature.properties.type, name: feature.properties.name, dist: feature.properties.dist_meters});
+        }
+
+        return result;
+    }
+
+    this.findNearests = function(from, radius, callback) {
+        $.ajax({
+            url: "http://api.visicom.ua/data-api/2.0/ru/search/adr_street.json?near=" + from.lng + "," + from.lat + "&radius=" + radius + "&key=" + VISICOM_AUTH_KEY,
+            type: "get",
+            dataType: "json"
+        }).done(function(response) {
+            callback(convertNearestResponse(response));
         }).error(function() {
             console.dir(arguments);
         });
