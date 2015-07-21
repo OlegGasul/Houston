@@ -3,9 +3,11 @@
 
 <div id="bar-wrp">
     <div>
-        <input id="search_string" type="text" placeholder="Адрес" />
-        <div>
-            <a class="search_link" href="#" onclick="findNearest();">Ближайшие</a>
+        <div id="search">
+            <input id="search_string" type="text" placeholder="Адрес" />
+            <div>
+                <a class="search_link" href="#" onclick="findNearest();" style="color: #cccccc">Ближайшие</a>
+            </div>
         </div>
         <div id="results"></div>
     </div>
@@ -148,6 +150,8 @@
                         gpsMarker.setLatLng(coordinates);
 
                     calculateRoute();
+
+                    $('.search_link').css('color', 'green');
                 }
 
                 setTimeout(requestGPS, 1000);
@@ -165,5 +169,11 @@
                 calculateRoute();
             }
         });
+
+        $(window).resize();
+    });
+
+    $(window).resize(function() {
+        $('#results').css('height', ($(window).height() - $('#search').height() - 20) + 'px');
     });
 </script>
