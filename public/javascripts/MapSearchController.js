@@ -38,7 +38,7 @@ function MapSearchController(defaultCity) {
 
     this.calculateRoute = function(from, to, callback) {
         $.ajax({
-            url: "http://api.visicom.ua/data-api/2.0/core/distance.json?origin=" + from + "&destination=" + to + "&geometry=path&key=" + VISICOM_AUTH_KEY,
+            url: "https://api.visicom.ua/data-api/2.0/core/distance.json?origin=" + from + "&destination=" + to + "&geometry=path&key=" + VISICOM_AUTH_KEY,
             type: "get",
             dataType: "json"
         }).done(function(data) {
@@ -64,7 +64,7 @@ function MapSearchController(defaultCity) {
 
     this.findNearests = function(from, radius, callback) {
         $.ajax({
-            url: "http://api.visicom.ua/data-api/2.0/ru/search/adr_street.json?near=" + from.lng + "," + from.lat + "&radius=" + radius + "&key=" + VISICOM_AUTH_KEY,
+            url: "https://api.visicom.ua/data-api/2.0/ru/search/adr_street.json?near=" + from.lng + "," + from.lat + "&radius=" + radius + "&key=" + VISICOM_AUTH_KEY,
             type: "get",
             dataType: "json"
         }).done(function(response) {
