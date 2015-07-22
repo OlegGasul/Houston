@@ -40,6 +40,10 @@
         var gpsLatlng = gpsMarker.getLatLng();
         searchController.findNearests(gpsLatlng, 10000, function(data) {
             $('#results').html('');
+            data.sort(function(a, b) {
+                return a.distance > b.distance;
+            });
+
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].distance)
                     continue;
