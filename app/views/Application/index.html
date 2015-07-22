@@ -43,7 +43,7 @@
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].distance)
                     continue;
-                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + data[i].distance  + '</div>')
+                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + geoHelper.formatDistance(data[i].distance)  + '</div>')
             }
 
             $('.address').click(function() {

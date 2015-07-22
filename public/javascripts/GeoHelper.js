@@ -25,7 +25,11 @@ function GeoHelper() {
         return  Number.parseInt(hours, 10) + klop / 60;
     }
 
-    this.convertToHoursMinSec = function(dec) {
+    this.formatDistance = function(distance) {
+        if (distance > 1000) {
+            return (distance / 1000).toFixed(2) + " km.";
+        } else
+            return distance + " m.";
 
     }
 
