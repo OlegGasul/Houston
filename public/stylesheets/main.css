@@ -62,3 +62,11 @@ body {
     bottom: 0;
     position: absolute;
 }
+
+#house_number {
+    width: 50px;
+}
+
+#nearest_wrp {
+    margin-top: 5px;
+}

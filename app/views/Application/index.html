@@ -5,7 +5,7 @@
     <div>
         <div id="search">
             <input id="search_string" type="text" placeholder="Адрес" />
-            <div>
+            <div id="nearest_wrp">
                 <a class="search_link" href="#" onclick="findNearest();" style="color: #cccccc">Ближайшие</a>
             </div>
         </div>
@@ -41,7 +41,9 @@
         searchController.findNearests(gpsLatlng, 10000, function(data) {
             $('#results').html('');
             for (var i = 0; i < data.length; i++) {
-                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + data[i].dist  + '</div>')
+                if (!data[i].distance)
+                    continue;
+                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + data[i].distance  + '</div>')
             }
 
             $('.address').click(function() {
