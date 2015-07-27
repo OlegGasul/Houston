@@ -31,6 +31,17 @@
     var polyline = null;
     var routeFlag = false;
 
+    var LeafIcon = L.Icon.extend({
+        options: {
+            iconUrl: '/public/images/gps_arrow.png',
+            iconSize:     [30, 30],
+            shadowSize:   [0, 0],
+            iconAnchor:   [15, 15],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [0, 0]
+        }
+    });
+
     var map = new L.Map('map', {center: new L.LatLng(50.45553, 30.52448), zoom: 10, zoomAnimation: false });
 
     function findNearest() {
@@ -74,8 +85,8 @@
                 }
 
                 polyline = new L.Polyline(response.coordinates, {
-                    color: 'red',
-                    weight: 5,
+                    color: 'blue',
+                    weight: 7,
                     opacity: 0.4,
                     smoothFactor: 1
                 }).addTo(map);
@@ -111,8 +122,6 @@
                 marker.bindPopup($('#popup').html());
             } else
                 marker.setLatLng(latlng);
-
-            marker.openPopup();
         }
 
         $('#search_string').enterKey(function () {
@@ -136,6 +145,7 @@
             var latlng = geoHelper.parseCoordinate(text);
             if (latlng) {
                 setMarker(latlng);
+                marker.openPopup();
                 map.setView(marker.getLatLng(), 17);
             } else {
                 doSearch()
@@ -144,6 +154,7 @@
 
         map.on('click', function(e) {
             setMarker(e.latlng);
+            marker.openPopup();
         });
 
         function requestGPS() {
@@ -151,9 +162,16 @@
                 if (data.value) {
                     var coordinates = data.value.split(',');
                     if (!gpsMarker) {
-                        gpsMarker = L.circleMarker(coordinates, {weight: 7, radius: 7, color: 'red'}).addTo(map);
+                        var icon = new LeafIcon();
+                        gpsMarker = L.rotatedMarker(coordinates, {weight: 7, radius: 7, color: 'red', icon: icon, angle: 0.0}).addTo(map);
                     } else
                         gpsMarker.setLatLng(coordinates);
+
+
+                    dataManager.getKey("bearing", 0, function(data) {
+                        if (!data.value) return;
+                        gpsMarker.options.angle = Math.round(Number.parseFloat(data.value));
+                    });
 
                     calculateRoute();
 
