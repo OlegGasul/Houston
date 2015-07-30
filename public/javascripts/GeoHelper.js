@@ -16,7 +16,7 @@ function GeoHelper() {
             var lat = Number.parseFloat(results[1] + "." + results[2]);
             var lng = Number.parseFloat(results[3] + "." + results[4]);
             return [lat, lng];
-        } else if (regexp2.test(text)) {
+        } else if (regexp3.test(text)) {
             var results = regexp1.exec(text);
             var lat = this.convertToDec(results[1], results[2], results[3]);
             var lng = this.convertToDec(results[4], results[5], results[6]);
