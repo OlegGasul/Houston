@@ -26,6 +26,7 @@
     var searchController = new MapSearchController();
     var dataManager = new DataManager();
     var geoHelper = new GeoHelper();
+    var helpers = new Helpers();
 
     var gpsMarker = null;
     var marker = null;
@@ -120,7 +121,7 @@
         function setMarker(latlng) {
             if (marker == null) {
                 marker = L.marker(latlng, {draggable: 'true'}).addTo(map);
-                $('#coord').html(latlng.join(', '));
+                $('#coord').html(helpers.toFixed(latlng, 5).join(', '));
                 marker.bindPopup($('#popup').html());
             } else
                 marker.setLatLng(latlng);
