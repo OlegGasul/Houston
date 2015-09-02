@@ -128,7 +128,7 @@
             var text = $(this).val();
 
             function doSearch() {
-                searchController.search('Киев, ' + text.replace(/,/g, ' '), function(data) {
+                searchController.search(text.replace(/,/g, ' '), function(data) {
                     $('#results').html('');
                     for (var i = 0; i < data.length; i++) {
                         $('#results').append('<div><a href="#" class="address" data-coordinate="' + data[i].geo + '">' + data[i].description + '</a></div>')
