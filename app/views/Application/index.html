@@ -181,11 +181,11 @@
                     $('.search_link').css('color', 'green');
                 }
 
-                setTimeout(requestGPS, 1000);
+                setTimeout(requestGPS, 500);
             });
         }
 
-        setTimeout(requestGPS, 1000);
+        setTimeout(requestGPS, 500);
 
         dataManager.getKey("destination", 0, function(data) {
             if (data.value) {
