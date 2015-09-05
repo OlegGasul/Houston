@@ -2,7 +2,7 @@
 function GeoHelper() {
 
     this.parseCoordinate = function(text) {
-        var regexp1 = /.*?(\d+)\s*°\s*(\d+)\s*‘\s*(\d+)\.?\d?\s*‘\s*‘\s*N\s*,?\s*(\d+)\s*°\s*(\d+)\s*‘\s*(\d+)\.?\d?\s*‘\s*‘\s*E.*?/i;
+        var regexp1 = /.*?(\d+)\s*.\s*(\d+)\s*.\s*(\d+)\.?\d?\s*.\s*.\s*N\s*,?\s*(\d+)\s*.\s*(\d+)\s*.\s*(\d+)\.?\d?\s*.\s*.\s*E.*?/i;
         var regexp2 = /.*?(\d+)\.(\d+)\s*,?\s*(\d+)\.(\d+).*?/i;
         var regexp3 = /.*?(\d+)\s*(\d+)\s*(\d+)\s*,\s*(\d+)\s*(\d+)\s*(\d+).*?/i;
 
