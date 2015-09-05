@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+#{set title: 'Houston HQ - Helpers' /}
+
+<div style="padding: 5px;">
+    <div style="padding: 5px;">
+        <input type="text" id="romain" /> <input type="button" id="calc_arabian" value="to arabian ->" /> <span id="arabian_result"></span>
+    </div>
+    <div style="padding: 5px;">
+        <input type="text" id="arabian" /> <input type="button" id="calc_romanian" value="to romanian ->" /> <span id="romain_result"></span>
+    </div>
+</div>
+
+<script>
+    var helpers = new Helpers();
+
+    $(function() {
+        $('#romain').keydown(function(e) {
+            var regex = new RegExp("^[MCDXLIV]+$");
+            var keycode = !event.charCode ? event.which : event.charCode;
+            if (keycode == 8 || keycode == 46)
+                return;
+
+            var key = String.fromCharCode(keycode);
+            if (!regex.test(key)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#arabian').keydown(function(e) {
+            var regex = new RegExp("^[0-9]+$");
+            var keycode = !event.charCode ? event.which : event.charCode;
+            if (keycode == 8 || keycode == 46)
+                return;
+
+            var key = String.fromCharCode(keycode);
+            if (!regex.test(key)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#calc_arabian').click(function() {
+            $('#arabian_result').html(helpers.fromRoman($('#romain').val(), true));
+        });
+
+        $('#calc_romanian').click(function() {
+            $('#romain_result').html(helpers.toRoman($('#arabian').val(), true));
+        });
+    })
+</script>

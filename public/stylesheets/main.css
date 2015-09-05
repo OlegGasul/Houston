@@ -70,3 +70,12 @@ body {
 #nearest_wrp {
     margin-top: 5px;
 }
+
+.map_links {
+    background-color: white;
+    padding: 4px;
+    position: absolute;
+    right: 80px;
+    top: 9px;
+    z-index: 5000;
+}
