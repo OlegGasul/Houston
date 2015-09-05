@@ -2,7 +2,7 @@ function Helpers() {
 
     this.toFixed = function(array, digits) {
         if (array.lat && array.lng)
-            return this.toFixed([array.lat, array.lng]);
+            return this.toFixed([array.lat, array.lng], digits);
 
         var result = [];
 
