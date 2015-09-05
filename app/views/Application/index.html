@@ -121,7 +121,7 @@
         function setMarker(latlng) {
             if (marker == null) {
                 marker = L.marker(latlng, {draggable: 'true'}).addTo(map);
-                $('#coord').html(helpers.toFixed([latlng.lat, latlng.lng], 5).join(', '));
+                $('#coord').html(helpers.toFixed(latlng, 5).join(', '));
                 marker.bindPopup($('#popup').html());
             } else
                 marker.setLatLng(latlng);
