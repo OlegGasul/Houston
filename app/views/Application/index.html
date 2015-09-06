@@ -15,9 +15,9 @@
 
 <div id="map-wrp">
     <div class="map_links">
-        <a href="#">Google</a>
+        <a id="google_link" href="#" target="_blank">Google</a>
         <span style="width: 50px;"></span>
-        <a href="#">Yandex</a>
+        <a id="yandex_link" href="#" target="_blank">Yandex</a>
     </div>
     <div id="map"></div>
 </div>
@@ -50,7 +50,12 @@
     });
 
     var map = new L.Map('map', {center: new L.LatLng(50.45553, 30.52448), zoom: 10, zoomAnimation: false });
-
+    map.on('zoomend', function() {
+        if (!marker)
+            return;
+        changeLinks(marker.getLatLng(), map.getZoom());
+    });
+    
     function findNearest() {
         if (gpsMarker == null)
             return;
@@ -113,6 +118,12 @@
         marker.closePopup();
     }
 
+    function changeLinks(latlng, zoom) {
+        $('#map_links').show();
+        $('#google_link').attr('href', 'https://www.google.com.ua/maps/@' + latlng.lat + ',' + latlng.lng + ',' + zoom + 'z?hl=ru');
+        $('#yandex_link').attr('href', 'https://maps.yandex.ua/?ll=' + latlng.lng + '%2C' + latlng.lat + '&z=' + zoom);
+    }
+
     $(document).ready(function() {
         var yandex = new L.Yandex();
         var yandexSatellite = new L.Yandex('satellite');
@@ -128,8 +139,13 @@
                 marker = L.marker(latlng, {draggable: 'true'}).addTo(map);
                 $('#coord').html(helpers.toFixed(latlng, 5).join(', '));
                 marker.bindPopup($('#popup').html());
-            } else
+                marker.on('dragend', function(event) {
+                    changeLinks(marker.getLatLng(), map.getZoom());
+                });
+            } else {
                 marker.setLatLng(latlng);
+                changeLinks(marker.getLatLng(), map.getZoom());
+            }
         }
 
         $('#search_string').enterKey(function () {
