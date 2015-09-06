@@ -8,6 +8,12 @@
     <div style="padding: 5px;">
         <input type="text" id="arabian" /> <input type="button" id="calc_romanian" value="to romanian ->" /> <span id="romain_result"></span>
     </div>
+    <div style="padding: 5px;">
+        <input type="text" id="number" /> <input type="button" id="calc_hex" value="to hex ->" /> <span id="hex_result"></span>
+    </div>
+    <div style="padding: 5px;">
+        <input type="text" id="hex" /> <input type="button" id="calc_number" value="to number ->" /> <span id="number_result"></span>
+    </div>
 </div>
 
 <script>
@@ -16,6 +22,32 @@
     $(function() {
         $('#romain').keydown(function(e) {
             var regex = new RegExp("^[MCDXLIV]+$");
+            var keycode = !event.charCode ? event.which : event.charCode;
+            if (keycode == 8 || keycode == 46)
+                return;
+
+            var key = String.fromCharCode(keycode);
+            if (!regex.test(key)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#hex').keydown(function(e) {
+            var regex = new RegExp("^[0-9ABCDEF]+$");
+            var keycode = !event.charCode ? event.which : event.charCode;
+            if (keycode == 8 || keycode == 46)
+                return;
+
+            var key = String.fromCharCode(keycode);
+            if (!regex.test(key)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#number').keydown(function(e) {
+            var regex = new RegExp("^[0-9]+$");
             var keycode = !event.charCode ? event.which : event.charCode;
             if (keycode == 8 || keycode == 46)
                 return;
@@ -46,6 +78,14 @@
 
         $('#calc_romanian').click(function() {
             $('#romain_result').html(helpers.toRoman($('#arabian').val(), true));
+        });
+
+        $('#calc_hex').click(function() {
+            $('#hex_result').html(parseInt($('#number').val()).toString(16));
+        });
+
+        $('#calc_number').click(function() {
+            $('#number_result').html(parseInt($('#hex').val(), 16));
         });
     })
 </script>
