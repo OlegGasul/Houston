@@ -55,7 +55,7 @@
             return;
         changeLinks(marker.getLatLng(), map.getZoom());
     });
-    
+
     function findNearest() {
         if (gpsMarker == null)
             return;
@@ -70,12 +70,12 @@
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].distance)
                     continue;
-                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + geoHelper.formatDistance(data[i].distance)  + '</div>')
+                $('#results').append('<div><a href="#" class="address" data-name="' +  data[i].name + '" data-settlement="' + data[i].settlement + '">' + data[i].name + '</a> ' + data[i].type + ' ~ ' + geoHelper.formatDistance(data[i].distance)  + '</div>')
             }
 
             $('.address').click(function() {
                 $('#results').html('');
-                $('#search_string').val($(this).attr('data-name'));
+                $('#search_string').val($(this).attr('data-settlement') + ' ' + $(this).attr('data-name'));
 
                 var e = jQuery.Event("keypress");
                 e.which = 13;

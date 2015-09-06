@@ -94,7 +94,7 @@ function MapSearchController(defaultCity) {
                 var feature = response.features[i];
                 if (feature.properties.settlement_id != "STL1NQ7EP")
                     continue;
-                streets.push({id: feature.id, name: feature.properties.name, type: feature.properties.type});
+                streets.push({id: feature.id, name: feature.properties.name, settlement: feature.properties.settlement, type: feature.properties.type});
             }
 
             calculateDistanceMatrix(from.lng + "," + from.lat, streets, 15000, function(data) {
